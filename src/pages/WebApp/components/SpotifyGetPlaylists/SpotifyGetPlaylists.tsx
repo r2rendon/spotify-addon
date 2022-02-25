@@ -7,7 +7,7 @@ const PLAYLISTS_ENDPOINT = "https://api.spotify.com/v1/me/playlists";
 const SpotifyGetPlaylists = () => {
   const [token, setToken] = useState<string | any>("");
   const [data, setData] = useState<Playlist>();
-  const [user, setUser] = useState<any>();
+  const [track, setTrack] = useState<any>();
 
   useEffect(() => {
     if (localStorage.getItem("accessToken")) {
@@ -30,13 +30,20 @@ const SpotifyGetPlaylists = () => {
       });
 
     axios
-      .get("https://api.spotify.com/v1/me", {
+      .get("https://api.spotify.com/v1/recommendations", {
         headers: {
           Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
         },
+        params:{
+          seed_genres: "pop,alternative,hip-hop,house",
+          // seed_tracks: "0c6xIDDpzE81m2q797ordA",
+          // seed_artists: "4NHQUGzhtTLFvgF5SZesLK,57dN52uHvrHOxijzpIgu3E",
+          limit: 4,
+        }
       })
       .then((response: any) => {
-        setUser(response.data);
+        setTrack(response.data.tracks[0]);
       })
       .catch((error: any) => {
         console.log(error);
@@ -47,7 +54,8 @@ const SpotifyGetPlaylists = () => {
     <>
       <button onClick={handleGetPlaylists}>Get Playlists</button>
       {data?.items ? data.items.map((item) => <p>{item.name}</p>) : null}
-      {user?.id}
+      <img className="img-fluid" src={track?.album.images[0].url} alt="" />
+      {track?.name}
     </>
   );
 };

@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./WebApp.css";
 import SpotifyGetPlaylists from "./components/SpotifyGetPlaylists/SpotifyGetPlaylists";
 import axios from "axios";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
+import NewReleases from "./components/NewReleases/NewReleases";
 
 const CLIENT_ID = "a6eeea3b3fd7485ba80c7bf5f98daf97"; // insert your client id here from spotify
 const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
@@ -33,9 +34,11 @@ const getReturnedParamsFromSpotifyAuth = (hash: any) => {
 };
 
 const WebApp = () => {
+  const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
-    if (window.location.hash) {
+    if (window.location.hash && localStorage.getItem("displayName") === null) {
+      console.log("entre");
       const { access_token, expires_in, token_type } =
         getReturnedParamsFromSpotifyAuth(window.location.hash);
 
@@ -48,15 +51,18 @@ const WebApp = () => {
           },
         });
         const userData = response.data;
-
-        await setDoc(doc(db, "users", userData.id), {
+        const currentUser = {
           displayName: userData.display_name,
           profilePicURL: userData.images[0].url,
           href: userData.href,
-        });
+        };
 
+        await setDoc(doc(db, "users", userData.id), currentUser);
+        localStorage.setItem("profilePicURL", currentUser.profilePicURL);
+        localStorage.setItem("displayName", currentUser.displayName);
+        localStorage.setItem("href ", currentUser.href);
       };
-      fetchUserData()
+      fetchUserData();
       
       localStorage.setItem("accessToken", access_token);
       localStorage.setItem("tokenType", token_type);
@@ -65,16 +71,20 @@ const WebApp = () => {
   });
 
   const handleLogin = () => {
+    localStorage.clear();
     window.location.href = `${SPOTIFY_AUTHORIZE_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL_AFTER_LOGIN}&scope=${SCOPES_URL_PARAM}&response_type=token&show_dialog=true`;
   };
 
   return (
-    <div className="container">
-      <h1>hi</h1>
-
-      <button onClick={handleLogin}>login to spotify</button>
-      <SpotifyGetPlaylists/>
-    </div>
+    <>
+      <div className="container-fluid mt-4">
+        <NewReleases/>
+      </div>
+      <div className="container mt-5">
+        <h1>hi</h1>
+        <button onClick={handleLogin}>login to spotify</button>
+      </div>
+    </>
   );
 };
 

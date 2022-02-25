@@ -2,12 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import Navbar from './components/Navbar';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from "./providers/AuthProvider";
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
+
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
+      <Navbar/>
       <App />
     </AuthProvider>
   </React.StrictMode>,
