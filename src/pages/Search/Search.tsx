@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import "./WebApp.css";
+import "./Search.css";
 import SpotifyGetPlaylists from "./components/SpotifyGetPlaylists/SpotifyGetPlaylists";
 import axios from "axios";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
 import NewReleases from "./components/NewReleases/NewReleases";
+import SearchResults from "./components/SearchResults/SearchResults";
 
 const CLIENT_ID = "a6eeea3b3fd7485ba80c7bf5f98daf97"; // insert your client id here from spotify
 const SPOTIFY_AUTHORIZE_ENDPOINT = "https://accounts.spotify.com/authorize";
-const REDIRECT_URL_AFTER_LOGIN = "http://localhost:3000/webapp";
+const REDIRECT_URL_AFTER_LOGIN = "http://localhost:3000/search";
 const SPACE_DELIMITER = "%20";
 const SCOPES = [
   "user-read-currently-playing",
@@ -18,7 +19,7 @@ const SCOPES = [
 const SCOPES_URL_PARAM = SCOPES.join(SPACE_DELIMITER);
 
 /* 
-http://localhost:3000/webapp#access_token=ABCqxL4Y&token_type=Bearer&expires_in=3600
+http://localhost:3000/Search#access_token=ABCqxL4Y&token_type=Bearer&expires_in=3600
 */
 const getReturnedParamsFromSpotifyAuth = (hash: any) => {
   const stringAfterHashtag = hash.substring(1);
@@ -33,7 +34,7 @@ const getReturnedParamsFromSpotifyAuth = (hash: any) => {
   return paramsSplitUp;
 };
 
-const WebApp = () => {
+const Search = () => {
   const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
@@ -55,12 +56,14 @@ const WebApp = () => {
           displayName: userData.display_name,
           profilePicURL: userData.images[0].url,
           href: userData.href,
+          username: userData.id,
         };
 
         await setDoc(doc(db, "users", userData.id), currentUser);
         localStorage.setItem("profilePicURL", currentUser.profilePicURL);
         localStorage.setItem("displayName", currentUser.displayName);
-        localStorage.setItem("href ", currentUser.href);
+        localStorage.setItem("href", currentUser.href);
+        localStorage.setItem("username", currentUser.username);
       };
       fetchUserData();
       
@@ -79,6 +82,8 @@ const WebApp = () => {
     <>
       <div className="container-fluid mt-4">
         <NewReleases/>
+        <br /><br />
+        <SearchResults/>
       </div>
       <div className="container mt-5">
         <h1>hi</h1>
@@ -88,4 +93,4 @@ const WebApp = () => {
   );
 };
 
-export default WebApp;
+export default Search;
