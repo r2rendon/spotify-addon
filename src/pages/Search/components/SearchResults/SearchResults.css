@@ -1,0 +1,14 @@
+.list-img-container{
+    max-width: 40px;
+}
+
+span {
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.add-to-library {
+    cursor: pointer;
+}

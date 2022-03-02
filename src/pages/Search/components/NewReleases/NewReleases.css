@@ -1,0 +1,17 @@
+.card-img-top {
+    width: 257.5px;
+    height: 253.47px;
+    object-fit: cover;
+}
+
+.card-text-container{
+    width: 217.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card{
+    width: 259.5px;
+    height: 319.47px;
+}
