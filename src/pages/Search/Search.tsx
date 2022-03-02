@@ -42,7 +42,7 @@ const Search = () => {
       console.log("entre");
       const { access_token, expires_in, token_type } =
         getReturnedParamsFromSpotifyAuth(window.location.hash);
-
+        
       localStorage.clear();
 
       const fetchUserData = async () => {

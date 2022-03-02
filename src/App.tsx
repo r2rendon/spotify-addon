@@ -1,15 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import * as ROUTES from "./constants/routes";
 import logo from './logo.svg';
 import './App.css';
-import WebApp from './pages/WebApp';
+import Search from './pages/Search';
+import Navbar from './components/Navbar';
+import MyLibrary from './pages/MyLibrary';
 
 const App = () => {
   return (
     <Router>
+      <Navbar/>
       <Routes>
-        <Route path={ROUTES.WEB_APP} element={<WebApp/>} />
+        <Route path={ROUTES.HOME} element={ <Navigate to={"/search"}/> } />
+        <Route path={ROUTES.SEARCH} element={ <Search/> } />
+        <Route path={ROUTES.MY_LIBRARY} element={ <MyLibrary/> } />
       </Routes>
     </Router>
   );

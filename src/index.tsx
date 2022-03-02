@@ -6,13 +6,15 @@ import Navbar from './components/Navbar';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from "./providers/AuthProvider";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
+import { GlobalProvider } from "./context/GlobalContext";
 
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
-      <Navbar/>
-      <App />
+      <GlobalProvider>
+        <App />
+      </GlobalProvider>
     </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
