@@ -3,6 +3,7 @@ import "./MyLibrary.css";
 import axios from "axios";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/config";
+import TrackList from "./components/TrackList/TrackList";
 
 const MyLibrary = () => {
 
@@ -11,7 +12,7 @@ const MyLibrary = () => {
 
   return (
     <>
-    
+      <TrackList/>
     </>
   );
 };
